@@ -16,7 +16,7 @@ services:
   backend:
     build:
       # Lấy Dockerfile nằm trong thư mục TaskFlow (backend project)
-      context: ./TaskFlow
+      context: ./taskflow-be
       dockerfile: Dockerfile
     ports:
       # App chạy ở 8080 bên trong container (do ASP.NET 8 config), ta map nó ra 5000 ở ngoài
