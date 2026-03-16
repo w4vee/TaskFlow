@@ -1,0 +1,3 @@
+/* Tailwind CSS v4 - chỉ cần 1 dòng import này */
+/* Tailwind sẽ tự generate tất cả utility classes (flex, p-4, text-white...) */
+@import "tailwindcss";

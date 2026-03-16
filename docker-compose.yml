@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Container số 1: Database (Microsoft SQL Server)
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      # Chấp nhận EULA của Microsoft và set mật khẩu
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_Secure_Password_123!
+    ports:
+      # Map Port từ ngoài host vào bên trong container (ngoài:trong)
+      - "1433:1433"
+
+  # Container số 2: Backend .NET API
+  backend:
+    build:
+      # Lấy Dockerfile nằm trong thư mục TaskFlow (backend project)
+      context: ./TaskFlow
+      dockerfile: Dockerfile
+    ports:
+      # App chạy ở 8080 bên trong container (do ASP.NET 8 config), ta map nó ra 5000 ở ngoài
+      - "5000:8080"
+    environment:
+      # Đè lại connection string trong appsettings.json.
+      # Server lúc này tên là 'sqlserver' (trùng với tên service ở trên), không phải 'localhost' nữa!
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TaskFlowDb;User Id=sa;Password=Your_Secure_Password_123!;TrustServerCertificate=True;
+    depends_on:
+      - sqlserver
+
+  # Container số 3: Frontend React App (Nginx)
+  frontend:
+    build:
+      context: ./taskflow-ui
+      dockerfile: Dockerfile
+    ports:
+      # Web app chạy Port 80 trong Nginx, ta map ra Port 3000 ở máy ngoài
+      - "3000:80"
+    depends_on:
+      - backend
