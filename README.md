@@ -39,8 +39,4 @@ TaskFlow/
 └── docker-compose.yml        # Docker orchestration
 ```
 
-## Testing
-```bash
-cd taskflow-be
-dotnet test
 ```
