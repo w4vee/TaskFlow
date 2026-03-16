@@ -9,6 +9,7 @@ A modern full-stack Kanban board application built with .NET 8 and React 19.
 - Task Management (CRUD, Status Updates)
 - Kanban Board UI
 - RESTful API with Swagger
+- Unit Tests
 
 ## Tech Stack
 
@@ -19,32 +20,23 @@ A modern full-stack Kanban board application built with .NET 8 and React 19.
 ## Project Structure
 
 ```
-taskflow-be/          # Backend (.NET 8)
-taskflow-ui/         # Frontend (React)
-docker-compose.yml   # Docker orchestration
-```
-
-## Quick Start
-
-### With Docker
-```bash
-docker-compose up -d
-```
-
-### Manual Setup
-
-**Backend:**
-```bash
-cd taskflow-be
-dotnet restore
-dotnet run --project TaskFlow.API
-```
-
-**Frontend:**
-```bash
-cd taskflow-ui
-npm install
-npm run dev
+TaskFlow/
+├── taskflow-be/              # Backend (.NET 8)
+│   ├── TaskFlow.API/         # Web API layer
+│   ├── TaskFlow.Application/ # Use cases, CQRS
+│   ├── TaskFlow.Domain/     # Entities, interfaces
+│   ├── TaskFlow.Infrastructure/ # Data access, services
+│   └── TaskFlow.Tests/      # Unit tests
+│
+├── taskflow-ui/              # Frontend (React)
+│   ├── src/
+│   │   ├── api/             # API client
+│   │   ├── components/      # UI components
+│   │   ├── contexts/        # React contexts
+│   │   ├── pages/           # Page components
+│   │   └── types/           # TypeScript types
+│
+└── docker-compose.yml        # Docker orchestration
 ```
 
 ## Testing
