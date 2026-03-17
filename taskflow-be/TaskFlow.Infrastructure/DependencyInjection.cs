@@ -9,6 +9,7 @@ using TaskFlow.Domain.Interfaces;
 using TaskFlow.Infrastructure.Data;
 using TaskFlow.Infrastructure.Repositories;
 using TaskFlow.Infrastructure.Services;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 namespace TaskFlow.Infrastructure;
 
@@ -110,6 +111,14 @@ public static class DependencyInjection
                 // Default là 5 phút (quá rộng) → set về 0 cho strict
                 ClockSkew = TimeSpan.Zero
             };
+        });
+
+        // ===== 6. REDIS CACHING =====
+        // Register Redis cache service
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("Redis");
+            options.InstanceName = "TaskFlow:";
         });
 
         return services;

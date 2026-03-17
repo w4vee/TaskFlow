@@ -39,7 +39,9 @@ public static class DependencyInjection
         // Đăng ký Pipeline Behaviors (thứ tự QUAN TRỌNG!)
         // ValidationBehavior chạy TRƯỚC LoggingBehavior
         // → Nếu validation fail, không cần log
+        // CachingBehavior chạy sau Validation nhưng trước Logging để log cache hit/miss
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CachingBehavior<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
         return services;

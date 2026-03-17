@@ -12,7 +12,13 @@ services:
       # Map Port từ ngoài host vào bên trong container (ngoài:trong)
       - "1433:1433"
 
-  # Container số 2: Backend .NET API
+  # Container số 2: Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  # Container số 3: Backend .NET API
   backend:
     build:
       # Lấy Dockerfile nằm trong thư mục TaskFlow (backend project)
@@ -25,10 +31,13 @@ services:
       # Đè lại connection string trong appsettings.json.
       # Server lúc này tên là 'sqlserver' (trùng với tên service ở trên), không phải 'localhost' nữa!
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=TaskFlowDb;User Id=sa;Password=Your_Secure_Password_123!;TrustServerCertificate=True;
+      # Override Redis connection to use service name
+      - ConnectionStrings__Redis=redis:6379
     depends_on:
       - sqlserver
+      - redis
 
-  # Container số 3: Frontend React App (Nginx)
+  # Container số 4: Frontend React App (Nginx)
   frontend:
     build:
       context: ./taskflow-ui
